@@ -1,6 +1,7 @@
 # cog-material-transfer
 
 - Based on the ComfyUI workflow by [DreamStarter](https://github.com/iordcalin/Comfy_Workflows)
+- Using [ZeST (Zero-Shot Material Transfer from a Single Image)](https://github.com/ttchengab/zest_code/) in [a custom ComfyUI node](https://github.com/kealiu/ComfyUI-ZeroShot-MTrans)
 
 Run it on Replicate:
 
