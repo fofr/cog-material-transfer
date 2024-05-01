@@ -834,7 +834,7 @@
       },
       "widgets_values": [
         "u2net: general purpose",
-        "CPU"
+        "CUDA"
       ]
     },
     {
@@ -1181,7 +1181,7 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "input.png",
+        "subject.png",
         "image"
       ]
     },
@@ -1240,7 +1240,7 @@
         1920,
         "nearest",
         true,
-        "always",
+        "downscale if bigger",
         0
       ]
     },

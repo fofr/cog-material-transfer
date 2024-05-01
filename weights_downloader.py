@@ -48,6 +48,12 @@ class WeightsDownloader:
             "/root/.cache/torch/hub/checkpoints/",
         )
 
+        self.download_if_not_exists(
+            "u2net.onnx",
+            f"{BASE_URL}/rembg/u2net.onnx.tar",
+            "/root/.u2net/",
+        )
+
     def download_if_not_exists(self, weight_str, url, dest):
         if not os.path.exists(f"{dest}/{weight_str}"):
             self.download(weight_str, url, dest)

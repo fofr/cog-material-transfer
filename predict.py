@@ -1,7 +1,7 @@
 import os
 import shutil
-import tarfile
-import zipfile
+import random
+import json
 import mimetypes
 from PIL import Image
 from typing import List
@@ -14,13 +14,14 @@ COMFYUI_TEMP_OUTPUT_DIR = "ComfyUI/temp"
 
 mimetypes.add_type("image/webp", ".webp")
 
-with open("examples/api_workflows/sdxl_simple_example.json", "r") as file:
-    EXAMPLE_WORKFLOW_JSON = file.read()
-
 
 class Predictor(BasePredictor):
     def setup(self):
         self.comfyUI = ComfyUI("127.0.0.1:8188")
+        with open("material_transfer_api.json", "r") as file:
+            default_workflow = file.read()
+
+        self.comfyUI.handle_weights(json.loads(default_workflow))
         self.comfyUI.start_server(OUTPUT_DIR, INPUT_DIR)
 
     def cleanup(self):
@@ -30,23 +31,9 @@ class Predictor(BasePredictor):
                 shutil.rmtree(directory)
             os.makedirs(directory)
 
-    def handle_input_file(self, input_file: Path):
-        file_extension = os.path.splitext(input_file)[1].lower()
-        if file_extension == ".tar":
-            with tarfile.open(input_file, "r") as tar:
-                tar.extractall(INPUT_DIR)
-        elif file_extension == ".zip":
-            with zipfile.ZipFile(input_file, "r") as zip_ref:
-                zip_ref.extractall(INPUT_DIR)
-        elif file_extension in [".jpg", ".jpeg", ".png", ".webp"]:
-            shutil.copy(input_file, os.path.join(INPUT_DIR, f"input{file_extension}"))
-        else:
-            raise ValueError(f"Unsupported file type: {file_extension}")
-
-        print("====================================")
-        print(f"Inputs uploaded to {INPUT_DIR}:")
-        self.log_and_collect_files(INPUT_DIR)
-        print("====================================")
+    def handle_input_file(self, input_file: Path, filename: str = "image.png"):
+        image = Image.open(input_file)
+        image.save(os.path.join(INPUT_DIR, filename))
 
     def log_and_collect_files(self, directory, prefix=""):
         files = []
@@ -62,19 +49,70 @@ class Predictor(BasePredictor):
                 files.extend(self.log_and_collect_files(path, prefix=f"{prefix}{f}/"))
         return files
 
+    def update_workflow(self, workflow, **kwargs):
+        workflow["6"]["inputs"]["text"] = kwargs["prompt"]
+        workflow["7"]["inputs"]["text"] = f"nsfw, nude, {kwargs['negative_prompt']}"
+
+        sampler = workflow["10"]["inputs"]
+        sampler["seed"] = kwargs["seed"]
+        sampler["steps"] = kwargs["steps"]
+        sampler["cfg"] = kwargs["guidance_scale"]
+
+        resize_input = workflow["60"]["inputs"]
+        resize_input["width"] = kwargs["max_width"]
+        resize_input["height"] = kwargs["max_height"]
+
+        if kwargs["material_strength"] == "strong":
+            workflow["44"]["inputs"]["preset"] = "PLUS (high strength)"
+        else:
+            workflow["44"]["inputs"]["preset"] = "STANDARD (medium strength)"
+
     def predict(
         self,
-        workflow_json: str = Input(
-            description="Your ComfyUI workflow as JSON. You must use the API version of your workflow. Get it from ComfyUI using ‘Save (API format)’. Instructions here: https://github.com/fofr/cog-comfyui",
+        material_image: Path = Input(
+            description="Material to transfer to the input image",
+        ),
+        subject_image: Path = Input(
+            description="Subject image to transfer the material to",
+        ),
+        prompt: str = Input(
+            description="Use a prompt that describe the image when the material is applied",
+            default="marble sculpture",
+        ),
+        negative_prompt: str = Input(
+            description="What you do not want to see in the image",
             default="",
         ),
-        input_file: Path = Input(
-            description="Input image, tar or zip file. Read guidance on workflows and input files here: https://github.com/fofr/cog-comfyui. Alternatively, you can replace inputs with URLs in your JSON workflow and the model will download them.",
-            default=None,
+        guidance_scale: float = Input(
+            description="Guidance scale for the diffusion process",
+            default=2.0,
+            ge=1.0,
+            le=10.0,
         ),
-        return_temp_files: bool = Input(
-            description="Return any temporary files, such as preprocessed controlnet images. Useful for debugging.",
+        steps: int = Input(
+            description="Number of steps. 6 steps gives good results, but try increasing to 15 or 20 if you need more detail",
+            default=6,
+        ),
+        max_width: int = Input(
+            description="Max width of the output image",
+            default=1920,
+        ),
+        max_height: int = Input(
+            description="Max height of the output image",
+            default=1920,
+        ),
+        material_strength: str = Input(
+            description="Strength of the material",
+            default="medium",
+            choices=["medium", "strong"],
+        ),
+        return_intermediate_images: bool = Input(
+            description="Return intermediate images like mask, and annotated images. Useful for debugging.",
             default=False,
+        ),
+        seed: int = Input(
+            description="Set a seed for reproducibility. Random by default.",
+            default=None,
         ),
         output_format: str = Input(
             description="Format of the output images",
@@ -87,31 +125,39 @@ class Predictor(BasePredictor):
             ge=0,
             le=100,
         ),
-        randomise_seeds: bool = Input(
-            description="Automatically randomise seeds (seed, noise_seed, rand_seed)",
-            default=True,
-        ),
     ) -> List[Path]:
         """Run a single prediction on the model"""
         self.cleanup()
 
-        if input_file:
-            self.handle_input_file(input_file)
+        if seed is None:
+            seed = random.randint(0, 2**32 - 1)
+            print(f"Random seed set to: {seed}")
 
-        # TODO: Record the previous models loaded
-        # If different, run /free to free up models and memory
+        self.handle_input_file(material_image, "material.png")
+        self.handle_input_file(subject_image, "subject.png")
 
-        wf = self.comfyUI.load_workflow(workflow_json or EXAMPLE_WORKFLOW_JSON)
+        with open("material_transfer_api.json", "r") as file:
+            workflow = json.loads(file.read())
 
-        if randomise_seeds:
-            self.comfyUI.randomise_seeds(wf)
+        self.update_workflow(
+            workflow,
+            prompt=prompt,
+            negative_prompt=negative_prompt,
+            guidance_scale=guidance_scale,
+            steps=steps,
+            max_width=max_width,
+            max_height=max_height,
+            material_strength=material_strength,
+            seed=seed,
+        )
 
+        wf = self.comfyUI.load_workflow(workflow)
         self.comfyUI.connect()
         self.comfyUI.run_workflow(wf)
 
         files = []
         output_directories = [OUTPUT_DIR]
-        if return_temp_files:
+        if return_intermediate_images:
             output_directories.append(COMFYUI_TEMP_OUTPUT_DIR)
 
         for directory in output_directories:

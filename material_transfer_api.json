@@ -85,7 +85,7 @@
   },
   "11": {
     "inputs": {
-      "image": "input.png",
+      "image": "subject.png",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -112,7 +112,7 @@
   "13": {
     "inputs": {
       "model": "u2net: general purpose",
-      "providers": "CPU"
+      "providers": "CUDA"
     },
     "class_type": "RemBGSession+",
     "_meta": {
@@ -434,7 +434,7 @@
       "height": 1920,
       "interpolation": "nearest",
       "keep_proportion": true,
-      "condition": "always",
+      "condition": "downscale if bigger",
       "multiple_of": 0,
       "image": [
         "11",

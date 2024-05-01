@@ -433,5 +433,8 @@
   ],
   "CLIPSEG": [
     "models--CIDAS--clipseg-rd64-refined"
+  ],
+  "REMBG": [
+    "u2net.onnx"
   ]
 }
