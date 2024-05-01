@@ -9,31 +9,10 @@
 repos=(
   "https://github.com/cubiq/ComfyUI_IPAdapter_plus 0d0a7b3"
   "https://github.com/Fannovel16/comfyui_controlnet_aux 692a3d0"
-  "https://github.com/fofr/ComfyUI-Impact-Pack 07a18e7"
-  "https://github.com/ltdrdata/ComfyUI-Inspire-Pack c8231dd"
-  "https://github.com/theUpsider/ComfyUI-Logic fb88973"
-  "https://github.com/Acly/comfyui-tooling-nodes bcb591c"
-  "https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved f9e0343"
-  "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite 5b5026c"
   "https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet 33d9884"
   "https://github.com/jags111/efficiency-nodes-comfyui 3b7e89d"
-  "https://github.com/Derfuu/Derfuu_ComfyUI_ModdedNodes 2ace4c4"
-  "https://github.com/FizzleDorf/ComfyUI_FizzNodes cd6cadd"
   "https://github.com/ssitu/ComfyUI_UltimateSDUpscale bcefc5b"
   "https://github.com/cubiq/ComfyUI_essentials 101ebae"
-  "https://github.com/shiimizu/ComfyUI-PhotoMaker-Plus 4c61084"
-  "https://github.com/pythongosssss/ComfyUI-Custom-Scripts 9916c13"
-  "https://github.com/BadCafeCode/masquerade-nodes-comfyui 240209b"
-  "https://github.com/Gourieff/comfyui-reactor-node ae81f62"
-  "https://github.com/cubiq/ComfyUI_InstantID 8b7932a"
-  "https://github.com/WASasquatch/was-node-suite-comfyui 33534f2"
-  "https://github.com/fofr/comfyui_segment_anything 8bc6178"
-  "https://github.com/ZHO-ZHO-ZHO/ComfyUI-BRIA_AI-RMBG 44a3f8f"
-  "https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes d78b780"
-  "https://github.com/huchenlei/ComfyUI-layerdiffuse 151f746"
-  "https://github.com/kijai/ComfyUI-KJNodes 48d5a18"
-  "https://github.com/Fannovel16/ComfyUI-Frame-Interpolation 5e11679"
-  "https://github.com/fofr/ComfyUI-HyperSDXL1StepUnetScheduler 5073c7a"
   "https://github.com/kealiu/ComfyUI-ZeroShot-MTrans d445504"
 )
 
@@ -75,6 +54,3 @@ for repo in "${repos[@]}"; do
     echo "Skipping clone for $repo_name, directory already exists"
   fi
 done
-
-# Copy the was_suite_config.json to the appropriate directory
-cp custom_node_configs/was_suite_config.json "$dest_dir"was-node-suite-comfyui/

@@ -18,15 +18,6 @@ import requests
 # custom_nodes helpers
 from helpers.ComfyUI_IPAdapter_plus import ComfyUI_IPAdapter_plus
 from helpers.ComfyUI_Controlnet_Aux import ComfyUI_Controlnet_Aux
-from helpers.ComfyUI_Reactor_Node import ComfyUI_Reactor_Node
-from helpers.ComfyUI_InstantID import ComfyUI_InstantID
-from helpers.ComfyUI_Impact_Pack import ComfyUI_Impact_Pack
-from helpers.ComfyUI_LayerDiffuse import ComfyUI_LayerDiffuse
-from helpers.ComfyUI_Segment_Anything import ComfyUI_Segment_Anything
-from helpers.ComfyUI_BRIA_AI_RMBG import ComfyUI_BRIA_AI_RMBG
-from helpers.ComfyUI_KJNodes import ComfyUI_KJNodes
-from helpers.ComfyUI_Frame_Interpolation import ComfyUI_Frame_Interpolation
-from helpers.WAS_Node_Suite import WAS_Node_Suite
 
 
 class ComfyUI:
@@ -82,14 +73,7 @@ class ComfyUI:
         for node in workflow.values():
             for handler in [
                 ComfyUI_Controlnet_Aux,
-                ComfyUI_Reactor_Node,
                 ComfyUI_IPAdapter_plus,
-                ComfyUI_InstantID,
-                ComfyUI_Impact_Pack,
-                ComfyUI_LayerDiffuse,
-                ComfyUI_Segment_Anything,
-                ComfyUI_BRIA_AI_RMBG,
-                WAS_Node_Suite,
             ]:
                 handler.add_weights(weights_to_download, node)
 
@@ -118,12 +102,6 @@ class ComfyUI:
         return isinstance(value, str) and any(
             value.lower().endswith(ft) for ft in filetypes
         )
-
-    def handle_known_unsupported_nodes(self, workflow):
-        for node in workflow.values():
-            ComfyUI_KJNodes.check_for_unsupported_nodes(node)
-            ComfyUI_Frame_Interpolation.check_for_unsupported_nodes(node)
-            WAS_Node_Suite.check_for_unsupported_nodes(node)
 
     def handle_inputs(self, workflow):
         print("Checking inputs")
@@ -233,7 +211,6 @@ class ComfyUI:
                 "You need to use the API JSON version of a ComfyUI workflow. To do this go to your ComfyUI settings and turn on 'Enable Dev mode Options'. Then you can save your ComfyUI workflow via the 'Save (API Format)' button."
             )
 
-        self.handle_known_unsupported_nodes(wf)
         self.handle_inputs(wf)
         self.handle_weights(wf)
         return wf
