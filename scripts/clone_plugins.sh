@@ -8,18 +8,17 @@
 # Each entry in the array is a string containing the repository URL and the commit hash separated by a space.
 repos=(
   "https://github.com/cubiq/ComfyUI_IPAdapter_plus 0d0a7b3"
-  "https://github.com/Fannovel16/comfyui_controlnet_aux 6d6f63c"
+  "https://github.com/Fannovel16/comfyui_controlnet_aux 692a3d0"
   "https://github.com/fofr/ComfyUI-Impact-Pack 07a18e7"
   "https://github.com/ltdrdata/ComfyUI-Inspire-Pack c8231dd"
   "https://github.com/theUpsider/ComfyUI-Logic fb88973"
   "https://github.com/Acly/comfyui-tooling-nodes bcb591c"
   "https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved f9e0343"
   "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite 5b5026c"
-  "https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet fbf005f"
+  "https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet 33d9884"
   "https://github.com/jags111/efficiency-nodes-comfyui 3b7e89d"
   "https://github.com/Derfuu/Derfuu_ComfyUI_ModdedNodes 2ace4c4"
   "https://github.com/FizzleDorf/ComfyUI_FizzNodes cd6cadd"
-  "https://github.com/TinyTerra/ComfyUI_tinyterraNodes eda8a09"
   "https://github.com/ssitu/ComfyUI_UltimateSDUpscale bcefc5b"
   "https://github.com/cubiq/ComfyUI_essentials 101ebae"
   "https://github.com/shiimizu/ComfyUI-PhotoMaker-Plus 4c61084"
@@ -35,6 +34,7 @@ repos=(
   "https://github.com/kijai/ComfyUI-KJNodes 48d5a18"
   "https://github.com/Fannovel16/ComfyUI-Frame-Interpolation 5e11679"
   "https://github.com/fofr/ComfyUI-HyperSDXL1StepUnetScheduler 5073c7a"
+  "https://github.com/kealiu/ComfyUI-ZeroShot-MTrans d445504"
 )
 
 # Destination directory
