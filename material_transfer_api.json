@@ -1,0 +1,449 @@
+{
+  "4": {
+    "inputs": {
+      "ckpt_name": "juggernautXL_juggernautX.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "sculpture",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "10",
+        5
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "10": {
+    "inputs": {
+      "seed": 182541674078463,
+      "steps": 6,
+      "cfg": 2,
+      "sampler_name": "dpmpp_sde",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "49",
+        0
+      ],
+      "positive": [
+        "52",
+        0
+      ],
+      "negative": [
+        "52",
+        1
+      ],
+      "latent_image": [
+        "41",
+        2
+      ],
+      "optional_vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "11": {
+    "inputs": {
+      "image": "input.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "12": {
+    "inputs": {
+      "rembg_session": [
+        "13",
+        0
+      ],
+      "image": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "ImageRemoveBackground+",
+    "_meta": {
+      "title": "🔧 Image Remove Background"
+    }
+  },
+  "13": {
+    "inputs": {
+      "model": "u2net: general purpose",
+      "providers": "CPU"
+    },
+    "class_type": "RemBGSession+",
+    "_meta": {
+      "title": "🔧 RemBG Session"
+    }
+  },
+  "36": {
+    "inputs": {
+      "brighter": 1,
+      "target_image": [
+        "60",
+        0
+      ],
+      "subject_mask": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "ZeST: Grayout Subject",
+    "_meta": {
+      "title": "ZeST: Grayout Subject"
+    }
+  },
+  "37": {
+    "inputs": {
+      "amount": 6,
+      "mask": [
+        "12",
+        1
+      ]
+    },
+    "class_type": "MaskBlur+",
+    "_meta": {
+      "title": "🔧 Mask Blur"
+    }
+  },
+  "39": {
+    "inputs": {
+      "mask": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "MaskPreview+",
+    "_meta": {
+      "title": "🔧 Mask Preview"
+    }
+  },
+  "40": {
+    "inputs": {
+      "images": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "41": {
+    "inputs": {
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ],
+      "pixels": [
+        "36",
+        0
+      ],
+      "mask": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "InpaintModelConditioning",
+    "_meta": {
+      "title": "InpaintModelConditioning"
+    }
+  },
+  "44": {
+    "inputs": {
+      "preset": "STANDARD (medium strength)",
+      "model": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "IPAdapterUnifiedLoader",
+    "_meta": {
+      "title": "IPAdapter Unified Loader"
+    }
+  },
+  "45": {
+    "inputs": {
+      "weight": 1,
+      "weight_type": "style transfer",
+      "combine_embeds": "concat",
+      "start_at": 0,
+      "end_at": 1,
+      "embeds_scaling": "V only",
+      "model": [
+        "44",
+        0
+      ],
+      "ipadapter": [
+        "44",
+        1
+      ],
+      "image": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "IPAdapterAdvanced",
+    "_meta": {
+      "title": "IPAdapter Advanced"
+    }
+  },
+  "46": {
+    "inputs": {
+      "image": "material.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "47": {
+    "inputs": {
+      "width": 1704,
+      "height": 1704,
+      "position": "center",
+      "x_offset": 0,
+      "y_offset": 0,
+      "image": [
+        "46",
+        0
+      ]
+    },
+    "class_type": "ImageCrop+",
+    "_meta": {
+      "title": "🔧 Image Crop"
+    }
+  },
+  "48": {
+    "inputs": {
+      "model": [
+        "45",
+        0
+      ]
+    },
+    "class_type": "DifferentialDiffusion",
+    "_meta": {
+      "title": "Differential Diffusion"
+    }
+  },
+  "49": {
+    "inputs": {
+      "multiplier": 0.9,
+      "model": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "RescaleCFG",
+    "_meta": {
+      "title": "RescaleCFG"
+    }
+  },
+  "50": {
+    "inputs": {
+      "strength": 0.9,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "41",
+        0
+      ],
+      "negative": [
+        "41",
+        1
+      ],
+      "control_net": [
+        "51",
+        0
+      ],
+      "image": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "Apply ControlNet (Advanced)"
+    }
+  },
+  "51": {
+    "inputs": {
+      "control_net_name": "t2i-adapter_diffusers_xl_depth_midas.safetensors"
+    },
+    "class_type": "ControlNetLoaderAdvanced",
+    "_meta": {
+      "title": "Load Advanced ControlNet Model 🛂🅐🅒🅝"
+    }
+  },
+  "52": {
+    "inputs": {
+      "strength": 0.35000000000000003,
+      "start_percent": 0,
+      "end_percent": 0.6,
+      "positive": [
+        "50",
+        0
+      ],
+      "negative": [
+        "50",
+        1
+      ],
+      "control_net": [
+        "53",
+        0
+      ],
+      "image": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "Apply ControlNet (Advanced)"
+    }
+  },
+  "53": {
+    "inputs": {
+      "control_net_name": "t2i-adapter_diffusers_xl_lineart.safetensors"
+    },
+    "class_type": "ControlNetLoaderAdvanced",
+    "_meta": {
+      "title": "Load Advanced ControlNet Model 🛂🅐🅒🅝"
+    }
+  },
+  "54": {
+    "inputs": {
+      "ckpt_name": "depth_anything_vitl14.pth",
+      "resolution": 1024,
+      "image": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "DepthAnythingPreprocessor",
+    "_meta": {
+      "title": "Depth Anything"
+    }
+  },
+  "55": {
+    "inputs": {
+      "coarse": "disable",
+      "resolution": 512,
+      "image": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "LineArtPreprocessor",
+    "_meta": {
+      "title": "Realistic Lineart"
+    }
+  },
+  "56": {
+    "inputs": {
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "57": {
+    "inputs": {
+      "images": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "58": {
+    "inputs": {
+      "images": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "60": {
+    "inputs": {
+      "width": 1920,
+      "height": 1920,
+      "interpolation": "nearest",
+      "keep_proportion": true,
+      "condition": "always",
+      "multiple_of": 0,
+      "image": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  }
+}
